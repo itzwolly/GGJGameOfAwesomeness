@@ -4,8 +4,7 @@ using System.Drawing;
 using GXPEngine;
 
 public class MyGame : Game //MyGame is a Game
-{	
-
+{	private List<Sprite> _colidables;
 	private Canvas _canvas1;
 	private Canvas _canvas2;
 	private Player _player1;
@@ -26,6 +25,7 @@ public class MyGame : Game //MyGame is a Game
 
 	public MyGame () : base(800, 600, false, false)
 	{
+		_colidables = new List<Sprite>();
 		targetFps = 60;
 		_player1 = new Player("test1.png");
 		_player2 = new Player("test2.png");
@@ -55,6 +55,23 @@ public class MyGame : Game //MyGame is a Game
 			_player2.Position.y = Input.mouseY;
 			_player2.Position.x = Input.mouseX;
 			_player2.alpha = 100;
+		}
+		if (Input.GetKeyDown(Key.R))
+		{
+			Bullet bullet = new Bullet();
+			bullet.x = _player1.x;
+			bullet.y = _player1.y;
+			AddChild(bullet);
+			_colidables.Add(bullet);
+		}
+
+		if (Input.GetKeyDown(Key.NUMPAD_7))
+		{ 
+			Bullet bullet = new Bullet();
+			bullet.x = _player2.x;
+			bullet.y = _player2.y;
+			AddChild(bullet);
+			_colidables.Add(bullet);
 		}
 		if (Input.GetKeyDown(Key.V))
 		{
@@ -163,6 +180,11 @@ public class MyGame : Game //MyGame is a Game
 	}
 
 	//system starts here
+
+	public void CheckCollision(Sprite other)
+	{
+		foreach(Sprite sprite in _sprites)
+	}
 	static void Main() 
 	{
 		new MyGame().Start();

@@ -66,6 +66,7 @@
     <Compile Include="Circle.cs" />
     <Compile Include="Reticle1.cs" />
     <Compile Include="Reticle2.cs" />
+    <Compile Include="Bullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GXPEngine\" />

@@ -4,12 +4,13 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="GXPEngine\MyGame.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GXPEngine\Bullet.cs">
     <Files>
-      <File FileName="GXPEngine\MyGame.cs" Line="17" Column="17" />
-      <File FileName="GXPEngine\Player.cs" Line="24" Column="9" />
+      <File FileName="GXPEngine\MyGame.cs" Line="62" Column="4" />
+      <File FileName="GXPEngine\Player.cs" Line="11" Column="31" />
       <File FileName="GXPEngine\Reticle1.cs" Line="20" Column="6" />
       <File FileName="GXPEngine\Reticle2.cs" Line="20" Column="6" />
+      <File FileName="GXPEngine\Bullet.cs" Line="6" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.GXPEngine PreferredExecutionTarget="MonoDevelop.Default" />
