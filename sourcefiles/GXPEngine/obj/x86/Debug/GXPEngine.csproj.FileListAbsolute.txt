@@ -1,0 +1,4 @@
+C:\Users\jeyhun\Desktop\SAXION\GAMEJAM 2017\GXPEngine_files\sourcefiles\GXPEngine\bin\Debug\GXPEngine.exe
+C:\Users\jeyhun\Desktop\SAXION\GAMEJAM 2017\GXPEngine_files\sourcefiles\GXPEngine\bin\Debug\GXPEngine.pdb
+C:\Users\jeyhun\Desktop\SAXION\GAMEJAM 2017\GXPEngine_files\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.exe
+C:\Users\jeyhun\Desktop\SAXION\GAMEJAM 2017\GXPEngine_files\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.pdb
