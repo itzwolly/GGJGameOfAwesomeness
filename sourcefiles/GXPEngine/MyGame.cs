@@ -181,9 +181,13 @@ public class MyGame : Game //MyGame is a Game
 
 	//system starts here
 
-	public void CheckCollision(Sprite other)
+	public int CheckCollision(Sprite other)
 	{
-		foreach(Sprite sprite in _sprites)
+		foreach (Sprite sprite in _colidables)
+		{
+
+		}
+		return 0;
 	}
 	static void Main() 
 	{

@@ -4,7 +4,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="GXPEngine\Bullet.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GXPEngine\MyGame.cs">
     <Files>
       <File FileName="GXPEngine\MyGame.cs" Line="62" Column="4" />
       <File FileName="GXPEngine\Player.cs" Line="11" Column="31" />
