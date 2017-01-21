@@ -6,3 +6,8 @@ C:\Users\jeyhun\Documents\ggj-game-of-awesomeness\sourcefiles\GXPEngine\bin\Debu
 C:\Users\jeyhun\Documents\ggj-game-of-awesomeness\sourcefiles\GXPEngine\bin\Debug\GXPEngine.pdb
 C:\Users\jeyhun\Documents\ggj-game-of-awesomeness\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.exe
 C:\Users\jeyhun\Documents\ggj-game-of-awesomeness\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.pdb
+D:\Game Jam\Repository\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.csprojResolveAssemblyReference.cache
+D:\Game Jam\Repository\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.exe
+D:\Game Jam\Repository\sourcefiles\GXPEngine\bin\Debug\GXPEngine.exe
+D:\Game Jam\Repository\sourcefiles\GXPEngine\bin\Debug\GXPEngine.pdb
+D:\Game Jam\Repository\sourcefiles\GXPEngine\obj\x86\Debug\GXPEngine.pdb
