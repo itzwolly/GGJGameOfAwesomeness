@@ -18,7 +18,7 @@ public class MyGame : Game //MyGame is a Game
 	private NLineSegment _lineG;
 	private NLineSegment _lineH;
 
-	public MyGame () : base(Game.main.width, Game.main.height, false, false)
+	public MyGame () : base(800, 600, false, false)
 	{
 		_lines = new List<NLineSegment>();
 		_bullets = new List<Bullet>();
