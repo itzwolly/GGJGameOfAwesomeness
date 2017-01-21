@@ -93,21 +93,21 @@ public class MyGame : Game //MyGame is a Game
         } else if (_player2.GetFlag() != null && _player2.GetFlag().PickedUp) {
             UpdateFlagPosition(_player2);
         }
-        
-
+        //ResolveColisionPlayer(_player1);
+        //ResolveColisionPlayer(_player2);
         //Console.WriteLine(_bullets.Count);
         PlayerMovement();
-        if (Input.GetMouseButtonDown(1)) {
-            _player1.Position.y = Input.mouseY;
-            _player1.Position.x = Input.mouseX;
-            _player1.alpha = 1f;
-        }
+        //if (Input.GetMouseButtonDown(1)) {
+        //    _player1.Position.y = Input.mouseY;
+        //    _player1.Position.x = Input.mouseX;
+        //    _player1.alpha = 1f;
+        //}
 
-        if (Input.GetMouseButtonDown(2)) {
-            _player2.Position.y = Input.mouseY;
-            _player2.Position.x = Input.mouseX;
-            _player2.alpha = 1f;
-        }
+        //if (Input.GetMouseButtonDown(2)) {
+        //    _player2.Position.y = Input.mouseY;
+        //    _player2.Position.x = Input.mouseX;
+        //    _player2.alpha = 1f;
+        //}
 
 
         if (Input.GetKeyDown(Key.R)) {
@@ -320,7 +320,26 @@ public class MyGame : Game //MyGame is a Game
 
     private void ResolveColisionPlayer(Player player)
     {
-        
+        if (player.x-player.width/2 < 0)
+        {
+            player.Position.x += 10;
+            player.x += 10;
+        }
+        if (player.x + player.width / 2 > game.width)
+        {
+            player.Position.x -= 10;
+            player.x -= 10;
+        }
+        if (player.y -player.height / 2 < 0)
+        {
+            player.Position.y += 10;
+            player.y += 10;
+        }
+        if (player.y + player.height / 2 > game.height)
+        {
+            player.Position.y -= 10;
+            player.y -= 10;
+        }
     }
 
     static void Main() {
