@@ -237,7 +237,7 @@ public class MyGame : Game //MyGame is a Game
                 return;
             }
             foreach (NLineSegment line in _lines) {
-                if (CheckLine(bullet, line)) {
+                if (CheckLineBullet(bullet, line)) {
                     bullet.Destroy();
                     _bullets.Remove(bullet);
                     return;
@@ -262,7 +262,7 @@ public class MyGame : Game //MyGame is a Game
             return Vec2.zero;
     }
 
-    private bool CheckLine(Bullet ball, LineSegment line) {
+    private bool CheckLineBullet(Bullet ball, LineSegment line) {
         Vec2 _ballToLineStart = ball.Position.Clone().Subtract(line.start);
         float _distance = Mathf.Abs(_ballToLineStart.Dot(line.lineOnOriginNormalized.Normal().Clone()));
         Vec2 _intersection = CheckIntersection(line.start.Clone(), line.end.Clone(), ball.Position, ball.NextPositionBorder);
@@ -276,6 +276,12 @@ public class MyGame : Game //MyGame is a Game
         }
         return false;
     }
+
+    private void ResolveColisionPlayer(Player player)
+    {
+        
+    }
+
     static void Main() {
         new MyGame().Start();
     }
