@@ -208,6 +208,7 @@ public class MyGame : Game //MyGame is a Game
 				_player1.alpha = 1;
 				bullet.Destroy();
 				_bullets.Remove(bullet);
+				ResetPlayer(_player1);
 				return;
 			}
 			if (_player2.Position.DistanceTo(bullet.Position) <= bullet.Radius + _player2.height&&bullet.PlayerNumber==1)
@@ -215,6 +216,7 @@ public class MyGame : Game //MyGame is a Game
 				_player2.alpha = 1;
 				bullet.Destroy();
 				_bullets.Remove(bullet);
+				ResetPlayer(_player2);
 				return;
 			}
 			foreach (NLineSegment line in _lines)
@@ -227,6 +229,11 @@ public class MyGame : Game //MyGame is a Game
 				}
 			}
 		}
+	}
+
+	private void ResetPlayer(Player player)
+	{
+		player.alpha=0.5f;
 	}
 
 	private Vec2 CheckIntersection(Vec2 v1, Vec2 v2, Vec2 v3, Vec2 v4)
