@@ -9,6 +9,8 @@ public class MyGame : Game //MyGame is a Game
 
     private Player _player1;
     private Player _player2;
+	//int index;
+    private int _timer1;
 
 
     public MyGame () : base(800, 600, false, false)
@@ -24,7 +26,6 @@ public class MyGame : Game //MyGame is a Game
     void Update ()
     {
         PlayerMovement();
-
         if (Input.GetMouseButtonDown(1))
         {
             _player1.Position.y = Input.mouseY;
@@ -62,7 +63,9 @@ public class MyGame : Game //MyGame is a Game
             _player1.Active = true;
             _player1.X = _player1.x;
             _player1.Y = _player1.y;
+			_player1.Wave.Position = _player1.Position.Clone();
             CreateWaves(_player1, new Pen(Color.Red));
+			_player1.Wave.Size = 10;
         }
 
         if (Input.GetKeyDown(Key.NUMPAD_1))
@@ -73,48 +76,56 @@ public class MyGame : Game //MyGame is a Game
             CreateWaves(_player2, new Pen(Color.Green));
         }
 
-        if (_player1.Active)
-        {
-            CheckIfInCircle();
-
-            if(_player1.Wait == 10)
+		if (_player1.Active)
+		{
+            if (_player1.Wave.Size > 310)
             {
-                CreateWaves(_player1, new Pen(Color.Red));
-                _player1.Size += 100;
-                if (_player1.Size >= 510)
+                _player1.Active = false;
+                _player1.Canvas.graphics.Clear(Color.Transparent);
+                _player2.alpha = 0.5f;
+                _player1.Wave.Size = 10;
+            } else {
+                if (_timer1 > 10)
                 {
-                    _player1.Size = 10;
-                    _player1.Active = false;
-                    _player1.Canvas.graphics.Clear(Color.Transparent);
-                    //move the circle reset to a function, posibly that also does the clears
-                    _player1.Wave.Position = Vec2.zero;
-                    _player1.Wave.Size = 0;
+                    _player1.Wave.Size += 100;
+                    CreateWaves(_player1, new Pen(Color.Red));
+                    _timer1 = 0;
                 }
-                _player1.Wait = 0;
+                _timer1++;
             }
-            _player1.Wait++;
+
+            if (IsCollidingWithCircle(_player2, _player1.Wave))
+            {
+                //circle of player1 is colliding with player 2
+                _player2.alpha = 1f;
+            } else {
+                _player2.alpha = 0.5f;
+            }
         }
+
+		//Console.WriteLine(_timer1 + " SEPERATOR " + _player1.Wave.Size);
 
         if (_player2.Active)
         {
-            CheckIfInCircle();
+            //IsCollidingWithCircle();
 
-            if (_player2.Wait == 10)
-            {
-                CreateWaves(_player2, new Pen(Color.Green));
-                _player2.Size += 100;
-                if (_player2.Size >= 510)
-                {
-                    _player2.Size = 10;
-                    _player2.Active = false;
-                    _player2.Canvas.graphics.Clear(Color.Transparent);
-                    //move the circle reset to a function, posibly that also does the clears
-                    _player2.Wave.Position = Vec2.zero;
-                    _player2.Wave.Size = 0;
-                }
-                _player2.Wait = 0;
-            }
-            _player2.Wait++;
+    //        if (_player2.Wait == 10)
+    //        {
+				//_player2.Size += 100;
+    //            CreateWaves(_player2, new Pen(Color.Green));
+    //            if (_player2.Size >= 310)
+    //            {
+    //                _player2.Size = 10;
+    //                _player2.Active = false;
+    //                _player2.Canvas.graphics.Clear(Color.Transparent);
+    //                //move the circle reset to a function, posibly that also does the clears
+    //                _player2.Wave.Position = Vec2.zero;
+    //                _player2.Wave.Size = 0;
+				//	_player1.alpha = 0.5f;
+    //            }
+    //            _player2.Wait = 0;
+    //        }
+    //        _player2.Wait++;
         }
 
     }
@@ -124,39 +135,36 @@ public class MyGame : Game //MyGame is a Game
         pPlayer.Canvas.graphics.Clear(Color.Transparent);
         pPlayer.Wave.Position.x = pPlayer.X;
         pPlayer.Wave.Position.y = pPlayer.Y;
-        pPlayer.Canvas.graphics.DrawEllipse(pPen, pPlayer.X - pPlayer.Size / 2, pPlayer.Y - pPlayer.Size / 2, pPlayer.Size, pPlayer.Size);
+		pPlayer.Canvas.graphics.DrawEllipse(pPen, pPlayer.X - pPlayer.Wave.Size / 2, pPlayer.Y - pPlayer.Wave.Size / 2, pPlayer.Wave.Size, pPlayer.Wave.Size);
     }
 
-    private void CheckIfInCircle()
+	private bool IsCollidingWithCircle(Player pPlayer, Circle pCircle)
     {
-        if (_player1.Wave.Position.DistanceTo(_player2.Position) <= _player1.Size / 2)
+		if (pCircle.Position.DistanceTo(pPlayer.Position) - pPlayer.height / 2 <= pCircle.Size / 2)
         {
-            _player2.alpha = 1f;
+			return true;
         }
-        if (_player2.Wave.Position.DistanceTo(_player1.Position) <= _player2.Size / 2)
-        {
-            _player1.alpha = 1f;
-        }
+		return false;
     }
 
     private void PlayerMovement()
     {
         if (Input.GetKey(Key.W))
-            _player1.Position.y -= 10;
+            _player1.Position.y -= 1;
         if (Input.GetKey(Key.S))
-            _player1.Position.y += 10;
+            _player1.Position.y += 1;
         if (Input.GetKey(Key.A))
-            _player1.Position.x -= 10;
+            _player1.Position.x -= 1;
         if (Input.GetKey(Key.D))
-            _player1.Position.x += 10;
+            _player1.Position.x += 1;
         if (Input.GetKey(Key.UP))
-            _player2.Position.y -= 10;
+            _player2.Position.y -= 1;
         if (Input.GetKey(Key.DOWN))
-            _player2.Position.y += 10;
+            _player2.Position.y += 1;
         if (Input.GetKey(Key.LEFT))
-            _player2.Position.x -= 10;
+            _player2.Position.x -= 1;
         if (Input.GetKey(Key.RIGHT))
-            _player2.Position.x += 10;
+            _player2.Position.x += 1;
     }
 
     //system starts here

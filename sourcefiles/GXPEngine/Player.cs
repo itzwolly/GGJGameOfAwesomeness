@@ -13,7 +13,6 @@ namespace GXPEngine
 		private Circle _wave;
 		private int _size;
 		private bool _active;
-		private int _wait;
 		private float _x;
 		private float _y;
 
@@ -32,10 +31,6 @@ namespace GXPEngine
 		public bool Active {
 			get { return _active; }
 			set { _active = value; }
-		}
-		public int Wait {
-			get { return _wait; }
-			set { _wait = value; }
 		}
 		public float X {
 			get { return _x; }
