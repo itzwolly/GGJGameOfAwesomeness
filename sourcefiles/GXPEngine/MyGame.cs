@@ -7,10 +7,10 @@ public class MyGame : Game //MyGame is a Game
 {
 	private List<NLineSegment> _lines;
 	private List<Bullet> _bullets;
-    private Player _player1;
-    private Player _player2;
+	private Player _player1;
+	private Player _player2;
 	//int index;
-    private int _timer1;
+	private int _timer1;
 	private int _timer2;
 
 	private NLineSegment _lineE;
@@ -18,15 +18,15 @@ public class MyGame : Game //MyGame is a Game
 	private NLineSegment _lineG;
 	private NLineSegment _lineH;
 
-    public MyGame () : base(800, 600, false, false)
-    {
+	public MyGame () : base(Game.main.width, Game.main.height, false, false)
+	{
 		_lines = new List<NLineSegment>();
 		_bullets = new List<Bullet>();
-        targetFps = 60;
+		targetFps = 60;
 		_player1 = new Player("test1.png",Player.PlayerId.PLAYERONE);
 		_player2 = new Player("test2.png",Player.PlayerId.PLAYERTWO);
-        AddChild(_player1);
-        AddChild(_player2);
+		AddChild(_player1);
+		AddChild(_player2);
 		_lineE = new NLineSegment(new Vec2(0, 0), new Vec2(game.width,0), 0xffffff00, 4);
 		AddChild(_lineE);
 		_lines.Add(_lineE);
@@ -39,50 +39,50 @@ public class MyGame : Game //MyGame is a Game
 		_lineH = new NLineSegment(new Vec2(0, game.height), new Vec2(game.width, game.height), 0xffffff00, 4);
 		AddChild(_lineH);
 		_lines.Add(_lineH);
-    }
+	}
 
-    void Update ()
-    {
-        PlayerMovement();
-        if (Input.GetMouseButtonDown(1))
-        {
-            _player1.Position.y = Input.mouseY;
-            _player1.Position.x = Input.mouseX;
-            _player1.alpha = 1f;
-        }
+	void Update ()
+	{
+		PlayerMovement();
+		if (Input.GetMouseButtonDown(1))
+		{
+			_player1.Position.y = Input.mouseY;
+			_player1.Position.x = Input.mouseX;
+			_player1.alpha = 1f;
+		}
 
-        if (Input.GetMouseButtonDown(2))
-        {
-            _player2.Position.y = Input.mouseY;
-            _player2.Position.x = Input.mouseX;
-            _player2.alpha = 1f;
-        }
+		if (Input.GetMouseButtonDown(2))
+		{
+			_player2.Position.y = Input.mouseY;
+			_player2.Position.x = Input.mouseX;
+			_player2.alpha = 1f;
+		}
 
-        if (Input.GetKeyDown(Key.R))
-        {
+		if (Input.GetKeyDown(Key.R))
+		{
 			Bullet bullet = new Bullet(_player1.ReticlePosition.Clone().Subtract(_player1.Position),_player1.Position.Clone());
-            bullet.x = _player1.x;
-            bullet.y = _player1.y;
-            game.AddChild(bullet);
+			bullet.x = _player1.x;
+			bullet.y = _player1.y;
+			game.AddChild(bullet);
 			_bullets.Add(bullet);
-			Console.WriteLine(bullet.Velocity+"||"+_player1.ReticlePosition);
-        }
+			Console.WriteLine(bullet.Velocity + "||" + _player1.ReticlePosition);
+		}
 
-        if (Input.GetKeyDown(Key.NUMPAD_7))
-        { 
+		if (Input.GetKeyDown(Key.NUMPAD_7))
+		{ 
 			Bullet bullet = new Bullet(_player2.ReticlePosition.Clone().Subtract(_player2.Position), _player2.Position.Clone());
 			bullet.x = _player2.x;
 			bullet.y = _player2.y;
 			game.AddChild(bullet);
 			_bullets.Add(bullet);
 			Console.WriteLine(bullet.Velocity + "||" + _player1.ReticlePosition);
-        }
+		}
 
-        if (Input.GetKeyDown(Key.V))
-        {
-            _player1.Active = true;
-            _player1.X = _player1.x;
-            _player1.Y = _player1.y;
+		if (Input.GetKeyDown(Key.V))
+		{
+			_player1.Active = true;
+			_player1.X = _player1.x;
+			_player1.Y = _player1.y;
 			_player1.Wave.Position = _player1.Position.Clone();
 			CreateWaves(_player1, new Pen(Color.Red));
 			_player1.Wave.Size = 10;
@@ -123,8 +123,8 @@ public class MyGame : Game //MyGame is a Game
 			}
 		}
 
-        if (_player2.Active)
-        {
+		if (_player2.Active)
+		{
 			if (_player2.Wave.Size > 310)
 			{
 				_player2.Active = false;
@@ -150,15 +150,15 @@ public class MyGame : Game //MyGame is a Game
 			else {
 				_player1.alpha = 0.5f;
 			}
-        }
+		}
 
-    }
+	}
 
-    private void CreateWaves(Player pPlayer, Pen pPen)
-    {
-        pPlayer.Canvas.graphics.Clear(Color.Transparent);
-        pPlayer.Wave.Position.x = pPlayer.X;
-        pPlayer.Wave.Position.y = pPlayer.Y;
+	private void CreateWaves(Player pPlayer, Pen pPen)
+	{
+		pPlayer.Canvas.graphics.Clear(Color.Transparent);
+		pPlayer.Wave.Position.x = pPlayer.X;
+		pPlayer.Wave.Position.y = pPlayer.Y;
 		pPlayer.Canvas.graphics.DrawEllipse(pPen, pPlayer.X - pPlayer.Wave.Size / 2, pPlayer.Y - pPlayer.Wave.Size / 2, pPlayer.Wave.Size, pPlayer.Wave.Size);
 	}
 
@@ -204,8 +204,6 @@ public class MyGame : Game //MyGame is a Game
 
 		}
 
-
-
 		return 0;
 	}
 
@@ -224,7 +222,7 @@ public class MyGame : Game //MyGame is a Game
 		else return Vec2.zero;
 	}
 
-	void ActualBounce(Bullet ball, LineSegment line)
+	private void ActualBounce(Bullet ball, LineSegment line)
 	{
 		Vec2 _ballToLineStart = ball.Position.Clone().Subtract(line.start);
 		float _distance = Mathf.Abs(_ballToLineStart.Dot(line.lineOnOriginNormalized.Normal().Clone()));
@@ -234,7 +232,6 @@ public class MyGame : Game //MyGame is a Game
 
 		//_test.x = _intersection.x;
 		//_test.y = _intersection.y;
-
 
 		if (_distance < ball.Radius)
 		{
