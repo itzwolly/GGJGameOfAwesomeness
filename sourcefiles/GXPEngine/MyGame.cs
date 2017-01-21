@@ -9,7 +9,7 @@ public class MyGame : Game //MyGame is a Game
 
 	private Player _player1;
 	private Player _player2;
-	//int index;
+
 	private int _timer1;
 
 
@@ -17,8 +17,8 @@ public class MyGame : Game //MyGame is a Game
 	{
 		_collidables = new List<Sprite>();
 		targetFps = 60;
-		_player1 = new Player("test1.png");
-		_player2 = new Player("test2.png");
+		_player1 = new Player("test1.png", Player.PlayerId.PLAYERONE);
+		_player2 = new Player("test2.png", Player.PlayerId.PLAYERTWO);
 		AddChild(_player1);
 		AddChild(_player2);
 	}
