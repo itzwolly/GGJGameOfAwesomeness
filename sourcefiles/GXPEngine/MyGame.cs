@@ -81,6 +81,8 @@ public class MyGame : Game //MyGame is a Game
 
     public void Update() {
         CheckCollision();
+        ResolveColisionPlayer(_player1);
+        ResolveColisionPlayer(_player2);
         //Console.WriteLine(_bullets.Count);
         PlayerMovement();
         if (Input.GetMouseButtonDown(1)) {
@@ -279,7 +281,26 @@ public class MyGame : Game //MyGame is a Game
 
     private void ResolveColisionPlayer(Player player)
     {
-        
+        if (player.x-player.width/2 < 0)
+        {
+            player.Position.x += 10;
+            player.x += 10;
+        }
+        if (player.x + player.width / 2 > game.width)
+        {
+            player.Position.x -= 10;
+            player.x -= 10;
+        }
+        if (player.y -player.height / 2 < 0)
+        {
+            player.Position.y += 10;
+            player.y += 10;
+        }
+        if (player.y + player.height / 2 > game.height)
+        {
+            player.Position.y -= 10;
+            player.y -= 10;
+        }
     }
 
     static void Main() {
