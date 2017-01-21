@@ -61,7 +61,7 @@ public class Player:Sprite
 	{
 		_playerId = pPlayerId;
 		_position = new Vec2();
-		_reticlePosition = new Vec2(game.width / 2, game.height / 2);
+		_reticlePosition = new Vec2(0,0);
 		SetOrigin(width / 2, height / 2);
 		alpha = 0.5f;
 
@@ -87,28 +87,36 @@ public class Player:Sprite
 		if (_playerId == PlayerId.PLAYERONE) {
 			if (Input.GetKey(Key.T)) {
 				_reticle1.y -= 10;
+				_reticlePosition.y -= 10;
 			}
 			if (Input.GetKey(Key.G)) {
 				_reticle1.y += 10;
+				_reticlePosition.y += 10;
 			}
 			if (Input.GetKey(Key.F)) {
 				_reticle1.x -= 10;
+				_reticlePosition.x -= 10;
 			}
 			if (Input.GetKey(Key.H)) {
 				_reticle1.x += 10;
+				_reticlePosition.x += 10;
 			}
 		} else if (_playerId == PlayerId.PLAYERTWO) {
 			if (Input.GetKey(Key.NUMPAD_8)) {
 				_reticle2.y -= 10;
+				_reticlePosition.y -= 10;
 			}
-			if (Input.GetKey(Key.NUMPAD_2)) {
+			if (Input.GetKey(Key.NUMPAD_5)) {
 				_reticle2.y += 10;
+				_reticlePosition.y += 10;
 			}
 			if (Input.GetKey(Key.NUMPAD_4)) {
 				_reticle2.x -= 10;
+				_reticlePosition.x -= 10;
 			}
 			if (Input.GetKey(Key.NUMPAD_6)) {
 				_reticle2.x += 10;
+				_reticlePosition.x += 10;
 			}
 		}
 	}
