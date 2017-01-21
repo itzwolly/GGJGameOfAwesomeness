@@ -35,8 +35,29 @@ public class MyGame : Game //MyGame is a Game
     private void CreateLevel() {
         NLineSegment line = new NLineSegment(new Vec2(game.width / 2, game.height / 6), new Vec2(game.width / 2, game.height / 3), 0xffffff00, 4);
         _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 2-50, game.height / 3), new Vec2(game.width / 2+50, game.height / 3), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 2-50, 2*game.height / 3), new Vec2(game.width / 2+50, 2*game.height / 3), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 2, 2*game.height / 3), new Vec2(game.width / 2, 5*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
 
-        line = new NLineSegment(new Vec2(game.width / 2.25f, game.height / 3), new Vec2(game.width / 2, game.height / 3), 0xffffff00, 4);
+        line = new NLineSegment(new Vec2(3*game.width/10, game.height/2), new Vec2(4*game.width/10,game.height/2), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(6 * game.width / 10, game.height / 2), new Vec2(7 * game.width / 10, game.height / 2), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(4 * game.width / 10, game.height / 2-50), new Vec2(4 * game.width / 10, game.height / 2+50), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(6 * game.width / 10, game.height / 2-50), new Vec2(6 * game.width / 10, game.height / 2+50), 0xffffff00, 4);
+        _lines.Add(line);
+
+        line = new NLineSegment(new Vec2(1*game.width / 10, 4*game.height / 6), new Vec2(1*game.width / 10, 5*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 10, 5*game.height / 6), new Vec2(2*game.width / 10, 5*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(9*game.width / 10, game.height / 6), new Vec2(9*game.width / 10, 2*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(8*game.width / 10, game.height / 6), new Vec2(9*game.width / 10, game.height / 6), 0xffffff00, 4);
         _lines.Add(line);
 
         foreach (NLineSegment item in _lines) {
