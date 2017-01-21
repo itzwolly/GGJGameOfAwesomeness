@@ -31,9 +31,11 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Flag.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />
     <Compile Include="GXPEngine\GameObject.cs" />
@@ -66,11 +68,11 @@
     <Compile Include="Circle.cs" />
     <Compile Include="Reticle.cs" />
     <Compile Include="Bullet.cs" />
-    <Compile Include="LolLinesStuff\Arrow.cs" />
-    <Compile Include="LolLinesStuff\DragHandler.cs" />
-    <Compile Include="LolLinesStuff\LineSegment.cs" />
-    <Compile Include="LolLinesStuff\NLineSegment.cs" />
-    <Compile Include="LolLinesStuff\TextField.cs" />
+    <Compile Include="Utils\Arrow.cs" />
+    <Compile Include="Utils\DragHandler.cs" />
+    <Compile Include="Utils\LineSegment.cs" />
+    <Compile Include="Utils\NLineSegment.cs" />
+    <Compile Include="Utils\TextField.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

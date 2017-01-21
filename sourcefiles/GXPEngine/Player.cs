@@ -16,6 +16,8 @@ public class Player : Sprite {
     private float _x;
     private float _y;
 
+    private Flag _flag;
+
     public enum PlayerId {
         NONE,
         PLAYERONE,
@@ -62,7 +64,6 @@ public class Player : Sprite {
         _reticlePosition = new Vec2(0, 0);
         SetOrigin(width / 2, height / 2);
         alpha = 0.5f;
-
 
         _wave = new Circle(x, y, 0);
         _canvas = new Canvas(game.width, game.height);
@@ -116,5 +117,26 @@ public class Player : Sprite {
                 _reticlePosition.x += 10;
             }
         }
+    }
+
+    public void PickupFlag(Flag pFlag) {
+        _flag = pFlag;
+        if (!_flag.PickedUp) {
+            _flag.PickedUp = true;
+            AddChild(_flag);
+        }
+    }
+
+    public void DropFlag(Flag pFlag) {
+        _flag = pFlag;
+        _flag.PickedUp = false;
+        RemoveChild(_flag);
+        _flag.x = x;
+        _flag.y = y;
+        game.AddChild(_flag);
+    }
+
+    public Flag GetFlag() {
+        return _flag;
     }
 }

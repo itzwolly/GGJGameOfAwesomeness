@@ -10,14 +10,14 @@ public class MyGame : Game //MyGame is a Game
     private List<Bullet> _bullets;
     private Player _player1;
     private Player _player2;
+    private Flag _flag;
 
     private int _timer1;
     private int _timer2;
 
     private NLineSegment _line;
 
-    public MyGame()
-        : base(1905, 1002, false, false) {
+    public MyGame() : base(1905, 1002, false, false) {
         targetFps = 60;
 
         _lines = new List<NLineSegment>();
@@ -28,6 +28,9 @@ public class MyGame : Game //MyGame is a Game
         AddChild(_player1);
         AddChild(_player2);
 
+        _flag = new Flag();
+        AddChild(_flag);
+
         CreateBoundary();
         CreateLevel();
     }
@@ -36,7 +39,7 @@ public class MyGame : Game //MyGame is a Game
         NLineSegment line = new NLineSegment(new Vec2(game.width / 2, game.height / 6), new Vec2(game.width / 2, game.height / 3), 0xffffff00, 4);
         _lines.Add(line);
 
-        line = new NLineSegment(new Vec2(game.width / 2.25f, game.height / 3), new Vec2(game.width / 2, game.height / 3), 0xffffff00, 4);
+        line = new NLineSegment(new Vec2(game.width / 2.25f, game.height / 3), new Vec2(game.width * 0.75f, game.height / 3), 0xffffff00, 4);
         _lines.Add(line);
 
         foreach (NLineSegment item in _lines) {
@@ -58,6 +61,16 @@ public class MyGame : Game //MyGame is a Game
 
     public void Update() {
         CheckCollision();
+        CheckFlagCollision();
+
+
+        if (_player1.GetFlag() != null && _player1.GetFlag().PickedUp) {
+            UpdateFlagPosition(_player1);
+        } else if (_player2.GetFlag() != null && _player2.GetFlag().PickedUp) {
+            UpdateFlagPosition(_player2);
+        }
+        
+
         //Console.WriteLine(_bullets.Count);
         PlayerMovement();
         if (Input.GetMouseButtonDown(1)) {
@@ -161,6 +174,20 @@ public class MyGame : Game //MyGame is a Game
 
     }
 
+    private void UpdateFlagPosition(Player pPlayer) {
+        pPlayer.GetFlag().x = 0;
+        pPlayer.GetFlag().y = 0;
+    }
+
+    private void CheckFlagCollision() {
+        if (_player1.HitTest(_flag)) {
+            _player1.PickupFlag(_flag);
+        }
+        if (_player2.HitTest(_flag)) {
+            _player2.PickupFlag(_flag);
+        }
+    }
+
     private void CreateWaves(Player pPlayer, Pen pPen) {
         pPlayer.Wave.Position.x = pPlayer.X;
         pPlayer.Wave.Position.y = pPlayer.Y;
@@ -179,21 +206,21 @@ public class MyGame : Game //MyGame is a Game
 
     private void PlayerMovement() {
         if (Input.GetKey(Key.W))
-            _player1.Position.y -= 1;
+            _player1.Position.y -= 10;
         if (Input.GetKey(Key.S))
-            _player1.Position.y += 1;
+            _player1.Position.y += 10;
         if (Input.GetKey(Key.A))
-            _player1.Position.x -= 1;
+            _player1.Position.x -= 10;
         if (Input.GetKey(Key.D))
-            _player1.Position.x += 1;
+            _player1.Position.x += 10;
         if (Input.GetKey(Key.UP))
-            _player2.Position.y -= 1;
+            _player2.Position.y -= 10;
         if (Input.GetKey(Key.DOWN))
-            _player2.Position.y += 1;
+            _player2.Position.y += 10;
         if (Input.GetKey(Key.LEFT))
-            _player2.Position.x -= 1;
+            _player2.Position.x -= 10;
         if (Input.GetKey(Key.RIGHT))
-            _player2.Position.x += 1;
+            _player2.Position.x += 10;
     }
 
     //system starts here
@@ -203,6 +230,9 @@ public class MyGame : Game //MyGame is a Game
                 _player1.alpha = 1;
                 bullet.Destroy();
                 _bullets.Remove(bullet);
+                if (_player1.GetFlag() != null) {
+                    _player1.DropFlag(_flag);
+                }
                 ResetPlayer(_player1);
                 return;
             }
@@ -210,6 +240,9 @@ public class MyGame : Game //MyGame is a Game
                 _player2.alpha = 1;
                 bullet.Destroy();
                 _bullets.Remove(bullet);
+                if (_player2.GetFlag() != null) {
+                    _player2.DropFlag(_flag);
+                }
                 ResetPlayer(_player2);
                 return;
             }
@@ -225,6 +258,7 @@ public class MyGame : Game //MyGame is a Game
 
     private void ResetPlayer(Player player) {
         player.alpha = 0.5f;
+        // set player back to start position.
     }
 
     private Vec2 CheckIntersection(Vec2 v1, Vec2 v2, Vec2 v3, Vec2 v4) {
