@@ -17,17 +17,18 @@ public class MyGame : Game //MyGame is a Game
 	private NLineSegment _lineF;
 	private NLineSegment _lineG;
 	private NLineSegment _lineH;
+	private NLineSegment _lineJ;
 
-	public MyGame () : base(800, 600, false, false)
+	public MyGame() : base(800,600, false, false)
 	{
 		_lines = new List<NLineSegment>();
 		_bullets = new List<Bullet>();
 		targetFps = 60;
-		_player1 = new Player("test1.png",Player.PlayerId.PLAYERONE);
-		_player2 = new Player("test2.png",Player.PlayerId.PLAYERTWO);
+		_player1 = new Player("test1.png", Player.PlayerId.PLAYERONE);
+		_player2 = new Player("test2.png", Player.PlayerId.PLAYERTWO);
 		AddChild(_player1);
 		AddChild(_player2);
-		_lineE = new NLineSegment(new Vec2(0, 0), new Vec2(game.width,0), 0xffffff00, 4);
+		_lineE = new NLineSegment(new Vec2(0, 0), new Vec2(game.width, 0), 0xffffff00, 4);
 		AddChild(_lineE);
 		_lines.Add(_lineE);
 		_lineF = new NLineSegment(new Vec2(0, 0), new Vec2(0, game.height), 0xffffff00, 4);
@@ -39,38 +40,44 @@ public class MyGame : Game //MyGame is a Game
 		_lineH = new NLineSegment(new Vec2(0, game.height), new Vec2(game.width, game.height), 0xffffff00, 4);
 		AddChild(_lineH);
 		_lines.Add(_lineH);
+		_lineJ = new NLineSegment(new Vec2(200, 200), new Vec2(game.width/2, game.height/2), 0xffffff00, 4);
+		AddChild(_lineJ);
+		_lines.Add(_lineJ);
 	}
 
-	void Update ()
+    public void Update ()
 	{
-		PlayerMovement();
-		if (Input.GetMouseButtonDown(1))
-		{
-			_player1.Position.y = Input.mouseY;
-			_player1.Position.x = Input.mouseX;
-			_player1.alpha = 1f;
-		}
+			CheckCollision();
+			Console.WriteLine(_bullets.Count);
+			PlayerMovement();
+			if (Input.GetMouseButtonDown(1))
+			{
+				_player1.Position.y = Input.mouseY;
+				_player1.Position.x = Input.mouseX;
+				_player1.alpha = 1f;
+			}
 
-		if (Input.GetMouseButtonDown(2))
-		{
-			_player2.Position.y = Input.mouseY;
-			_player2.Position.x = Input.mouseX;
-			_player2.alpha = 1f;
-		}
+			if (Input.GetMouseButtonDown(2))
+			{
+				_player2.Position.y = Input.mouseY;
+				_player2.Position.x = Input.mouseX;
+				_player2.alpha = 1f;
+			}
+		
 
-		if (Input.GetKeyDown(Key.R))
-		{
-			Bullet bullet = new Bullet(_player1.ReticlePosition.Clone().Subtract(_player1.Position),_player1.Position.Clone());
-			bullet.x = _player1.x;
-			bullet.y = _player1.y;
-			game.AddChild(bullet);
+        if (Input.GetKeyDown(Key.R))
+        {
+			Bullet bullet = new Bullet(_player1.ReticlePosition.Clone().Subtract(_player1.Position),_player1.Position.Clone(),1);
+            bullet.x = _player1.x;
+            bullet.y = _player1.y;
+            game.AddChild(bullet);
 			_bullets.Add(bullet);
 			Console.WriteLine(bullet.Velocity + "||" + _player1.ReticlePosition);
 		}
 
-		if (Input.GetKeyDown(Key.NUMPAD_7))
-		{ 
-			Bullet bullet = new Bullet(_player2.ReticlePosition.Clone().Subtract(_player2.Position), _player2.Position.Clone());
+        if (Input.GetKeyDown(Key.NUMPAD_7))
+        { 
+			Bullet bullet = new Bullet(_player2.ReticlePosition.Clone().Subtract(_player2.Position), _player2.Position.Clone(),2);
 			bullet.x = _player2.x;
 			bullet.y = _player2.y;
 			game.AddChild(bullet);
@@ -192,22 +199,37 @@ public class MyGame : Game //MyGame is a Game
 	}
 
 	//system starts here
-	public int CheckCollision(Sprite other)
+	public void CheckCollision()
 	{
 		foreach (Bullet bullet in _bullets)
 		{
-
+			if (_player1.Position.DistanceTo(bullet.Position) <= bullet.Radius + _player1.height&& bullet.PlayerNumber == 2)
+			{
+				_player1.alpha = 1;
+				bullet.Destroy();
+				_bullets.Remove(bullet);
+				return;
+			}
+			if (_player2.Position.DistanceTo(bullet.Position) <= bullet.Radius + _player2.height&&bullet.PlayerNumber==1)
+			{
+				_player2.alpha = 1;
+				bullet.Destroy();
+				_bullets.Remove(bullet);
+				return;
+			}
+			foreach (NLineSegment line in _lines)
+			{
+				if (CheckLine(bullet, line))
+				{
+					bullet.Destroy();
+					_bullets.Remove(bullet);
+					return;
+				}
+			}
 		}
-
-		foreach (NLineSegment sprite in _lines)
-		{
-
-		}
-
-		return 0;
 	}
 
-	public Vec2 CheckIntersection(Vec2 v1, Vec2 v2, Vec2 v3, Vec2 v4)
+	private Vec2 CheckIntersection(Vec2 v1, Vec2 v2, Vec2 v3, Vec2 v4)
 	{
 		//_test.x = v4.x;
 		//_test.y = v4.y;
@@ -222,7 +244,7 @@ public class MyGame : Game //MyGame is a Game
 		else return Vec2.zero;
 	}
 
-	private void ActualBounce(Bullet ball, LineSegment line)
+	private bool CheckLine(Bullet ball, LineSegment line)
 	{
 		Vec2 _ballToLineStart = ball.Position.Clone().Subtract(line.start);
 		float _distance = Mathf.Abs(_ballToLineStart.Dot(line.lineOnOriginNormalized.Normal().Clone()));
@@ -238,22 +260,12 @@ public class MyGame : Game //MyGame is a Game
 			//Console.WriteLine((_distanceToStart > line.lineLenght || _distanceToEnd > line.lineLenght) && _distance < ball.radius);
 			if (!((_distanceToStart > line.lineLenght + ball.Radius || _distanceToEnd > line.lineLenght + ball.Radius) && _distance < ball.Radius))
 			{
-				if (_intersection.x == 0 && _intersection.y == 0)
-				{
-					ball.Position.Subtract(ball.Velocity.Clone().Normalize().Scale(_distance));
-				}
-				else
-				{
-					ball.Position = _intersection.Clone();
-				}
-				ball.UpdateNextPosition();
-
-				ball.Velocity.Reflect(line.lineOnOriginNormalized, 1);
-				ball.UpdateNextPosition();
+				return true;
 
 				//ball.velocity = Vec2.zero;
 			}
 		}
+		return false;
 	}
 	static void Main() 
 	{
