@@ -67,8 +67,14 @@
     <Compile Include="Reticle1.cs" />
     <Compile Include="Reticle2.cs" />
     <Compile Include="Bullet.cs" />
+    <Compile Include="LolLinesStuff\Arrow.cs" />
+    <Compile Include="LolLinesStuff\DragHandler.cs" />
+    <Compile Include="LolLinesStuff\LineSegment.cs" />
+    <Compile Include="LolLinesStuff\NLineSegment.cs" />
+    <Compile Include="LolLinesStuff\TextField.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GXPEngine\" />
+    <Folder Include="LolLinesStuff\" />
   </ItemGroup>
 </Project>
