@@ -26,7 +26,11 @@ public class MyGame : Game //MyGame is a Game
         _player1 = new Player("test1.png", Player.PlayerId.PLAYERONE);
         _player2 = new Player("test2.png", Player.PlayerId.PLAYERTWO);
         AddChild(_player1);
+        _player1.Position = new Vec2(game.width / 12, 7 * height / 8);
+        _player1.StartingPosition = new Vec2(game.width / 12, 7 * height / 8);
         AddChild(_player2);
+        _player2.Position = new Vec2(11 * game.width / 12 , height / 8);
+        _player2.StartingPosition = new Vec2(11 * game.width / 12, height / 8);
 
         _flag = new Flag();
         AddChild(_flag);
@@ -38,8 +42,29 @@ public class MyGame : Game //MyGame is a Game
     private void CreateLevel() {
         NLineSegment line = new NLineSegment(new Vec2(game.width / 2, game.height / 6), new Vec2(game.width / 2, game.height / 3), 0xffffff00, 4);
         _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 2-50, game.height / 3), new Vec2(game.width / 2+50, game.height / 3), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 2-50, 2*game.height / 3), new Vec2(game.width / 2+50, 2*game.height / 3), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 2, 2*game.height / 3), new Vec2(game.width / 2, 5*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
 
-        line = new NLineSegment(new Vec2(game.width / 2.25f, game.height / 3), new Vec2(game.width * 0.75f, game.height / 3), 0xffffff00, 4);
+        line = new NLineSegment(new Vec2(3*game.width/10, game.height/2), new Vec2(4*game.width/10,game.height/2), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(6 * game.width / 10, game.height / 2), new Vec2(7 * game.width / 10, game.height / 2), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(4 * game.width / 10, game.height / 2-50), new Vec2(4 * game.width / 10, game.height / 2+50), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(6 * game.width / 10, game.height / 2-50), new Vec2(6 * game.width / 10, game.height / 2+50), 0xffffff00, 4);
+        _lines.Add(line);
+
+        line = new NLineSegment(new Vec2(1*game.width / 10, 4*game.height / 6), new Vec2(1*game.width / 10, 5*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(game.width / 10, 5*game.height / 6), new Vec2(2*game.width / 10, 5*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(9*game.width / 10, game.height / 6), new Vec2(9*game.width / 10, 2*game.height / 6), 0xffffff00, 4);
+        _lines.Add(line);
+        line = new NLineSegment(new Vec2(8*game.width / 10, game.height / 6), new Vec2(9*game.width / 10, game.height / 6), 0xffffff00, 4);
         _lines.Add(line);
 
         foreach (NLineSegment item in _lines) {
@@ -60,9 +85,8 @@ public class MyGame : Game //MyGame is a Game
     }
 
     public void Update() {
-        CheckCollision();
         CheckFlagCollision();
-
+        CheckCollision();
 
         if (_player1.GetFlag() != null && _player1.GetFlag().PickedUp) {
             UpdateFlagPosition(_player1);
@@ -124,7 +148,7 @@ public class MyGame : Game //MyGame is a Game
             if (_player1.Wave.Size > 310) {
                 _player1.Active = false;
                 _player1.Canvas.graphics.Clear(Color.Transparent);
-                _player2.alpha = 0.5f;
+                _player2.alpha = 0f;
                 _player1.Wave.Size = 10;
                 _player1.Wave.UpdateCircleSize(_player1.Wave.Size);
                 RemoveChild(_player1.Wave);
@@ -142,7 +166,7 @@ public class MyGame : Game //MyGame is a Game
                 //circle of player1 is colliding with player 2
                 _player2.alpha = 1f;
             } else {
-                _player2.alpha = 0.5f;
+                _player2.alpha = 0f;
             }
         }
 
@@ -150,7 +174,7 @@ public class MyGame : Game //MyGame is a Game
             if (_player2.Wave.Size > 310) {
                 _player2.Active = false;
                 _player2.Canvas.graphics.Clear(Color.Transparent);
-                _player1.alpha = 0.5f;
+                _player1.alpha = 0f;
                 _player2.Wave.Size = 10;
                 _player2.Wave.UpdateCircleSize(_player2.Wave.Size);
                 RemoveChild(_player2.Wave);
@@ -168,7 +192,7 @@ public class MyGame : Game //MyGame is a Game
                 //circle of player1 is colliding with player 2
                 _player1.alpha = 1f;
             } else {
-                _player1.alpha = 0.5f;
+                _player1.alpha = 0f;
             }
         }
 
@@ -180,11 +204,15 @@ public class MyGame : Game //MyGame is a Game
     }
 
     private void CheckFlagCollision() {
-        if (_player1.HitTest(_flag)) {
-            _player1.PickupFlag(_flag);
+        if (_player1.AllowedToPickup) {
+            if (_player1.HitTest(_flag)) {
+                _player1.PickupFlag(_flag);
+            }
         }
-        if (_player2.HitTest(_flag)) {
-            _player2.PickupFlag(_flag);
+        if (_player2.AllowedToPickup) {
+            if (_player2.HitTest(_flag)) {
+                _player2.PickupFlag(_flag);
+            }
         }
     }
 
@@ -206,21 +234,21 @@ public class MyGame : Game //MyGame is a Game
 
     private void PlayerMovement() {
         if (Input.GetKey(Key.W))
-            _player1.Position.y -= 10;
+            _player1.Position.y -= 3;
         if (Input.GetKey(Key.S))
-            _player1.Position.y += 10;
+            _player1.Position.y += 3;
         if (Input.GetKey(Key.A))
-            _player1.Position.x -= 10;
+            _player1.Position.x -= 3;
         if (Input.GetKey(Key.D))
-            _player1.Position.x += 10;
+            _player1.Position.x += 3;
         if (Input.GetKey(Key.UP))
-            _player2.Position.y -= 10;
+            _player2.Position.y -= 3;
         if (Input.GetKey(Key.DOWN))
-            _player2.Position.y += 10;
+            _player2.Position.y += 3;
         if (Input.GetKey(Key.LEFT))
-            _player2.Position.x -= 10;
+            _player2.Position.x -= 3;
         if (Input.GetKey(Key.RIGHT))
-            _player2.Position.x += 10;
+            _player2.Position.x += 3;
     }
 
     //system starts here
@@ -247,7 +275,7 @@ public class MyGame : Game //MyGame is a Game
                 return;
             }
             foreach (NLineSegment line in _lines) {
-                if (CheckLine(bullet, line)) {
+                if (CheckLineBullet(bullet, line)) {
                     bullet.Destroy();
                     _bullets.Remove(bullet);
                     return;
@@ -256,46 +284,45 @@ public class MyGame : Game //MyGame is a Game
         }
     }
 
-    private void ResetPlayer(Player player) {
-        player.alpha = 0.5f;
-        // set player back to start position.
+    private void ResetPlayer(Player pPlayer) {
+        pPlayer.alpha = 0f;
+        pPlayer.Position.x = pPlayer.StartingPosition.x;
+        pPlayer.Position.y = pPlayer.StartingPosition.y;
+        pPlayer.AllowedToPickup = true;
     }
 
     private Vec2 CheckIntersection(Vec2 v1, Vec2 v2, Vec2 v3, Vec2 v4) {
-        //_test.x = v4.x;
-        //_test.y = v4.y;
         v1.Add(v2.Clone().Subtract(v1).Normal().Scale(_player1.width));
         v2.Add(v2.Clone().Subtract(v1).Normal().Scale(_player1.width));
 
         float ua = ((v4.x - v3.x) * (v1.y - v3.y) - (v4.y - v3.y) * (v1.x - v3.x)) / ((v4.y - v3.y) * (v2.x - v1.x) - (v4.x - v3.x) * (v2.y - v1.y));
         float ub = ((v2.x - v1.x) * (v1.y - v3.y) - (v2.y - v1.y) * (v1.x - v3.x)) / ((v4.y - v3.y) * (v2.x - v1.x) - (v4.x - v3.x) * (v2.y - v1.y));
-        //Console.WriteLine(ua+"||"+ub);
         if (Mathf.Abs(ub) < 1)
             return new Vec2(v1.x + ua * (v2.x - v1.x), v1.y + ua * (v2.y - v1.y));
         else
             return Vec2.zero;
     }
 
-    private bool CheckLine(Bullet ball, LineSegment line) {
+    private bool CheckLineBullet(Bullet ball, LineSegment line) {
         Vec2 _ballToLineStart = ball.Position.Clone().Subtract(line.start);
         float _distance = Mathf.Abs(_ballToLineStart.Dot(line.lineOnOriginNormalized.Normal().Clone()));
-        Vec2 _intersection = CheckIntersection(line.start.Clone(), line.end.Clone(), ball.Position, ball.NextPositionBorder);//try on border
+        Vec2 _intersection = CheckIntersection(line.start.Clone(), line.end.Clone(), ball.Position, ball.NextPositionBorder);
         float _distanceToStart = line.start.DistanceTo(ball.Position);
         float _distanceToEnd = line.end.DistanceTo(ball.Position);
 
-        //_test.x = _intersection.x;
-        //_test.y = _intersection.y;
-
         if (_distance < ball.Radius) {
-            //Console.WriteLine((_distanceToStart > line.lineLenght || _distanceToEnd > line.lineLenght) && _distance < ball.radius);
             if (!((_distanceToStart > line.lineLenght + ball.Radius || _distanceToEnd > line.lineLenght + ball.Radius) && _distance < ball.Radius)) {
                 return true;
-
-                //ball.velocity = Vec2.zero;
             }
         }
         return false;
     }
+
+    private void ResolveColisionPlayer(Player player)
+    {
+        
+    }
+
     static void Main() {
         new MyGame().Start();
     }

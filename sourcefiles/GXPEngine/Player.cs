@@ -16,6 +16,9 @@ public class Player : Sprite {
     private float _x;
     private float _y;
 
+    private Vec2 _startingPosition;
+    private bool _allowedToPickUp = true;
+
     private Flag _flag;
 
     public enum PlayerId {
@@ -56,6 +59,14 @@ public class Player : Sprite {
         get { return _reticlePosition; }
         set { _reticlePosition = value; }
     }
+    public Vec2 StartingPosition {
+        get { return _startingPosition; }
+        set { _startingPosition = value; }
+    }
+    public bool AllowedToPickup {
+        get { return _allowedToPickUp; }
+        set { _allowedToPickUp = value; }
+    }
 
     public Player(string pFileName, PlayerId pPlayerId)
         : base(pFileName) {
@@ -63,7 +74,7 @@ public class Player : Sprite {
         _position = new Vec2();
         _reticlePosition = new Vec2(0, 0);
         SetOrigin(width / 2, height / 2);
-        alpha = 0.5f;
+        alpha = 0f;
 
         _wave = new Circle(x, y, 0);
         _canvas = new Canvas(game.width, game.height);
@@ -72,8 +83,14 @@ public class Player : Sprite {
         if (_playerId == PlayerId.PLAYERONE) {
             _reticle1 = new Reticle("reticle1.png");
             game.AddChild(_reticle1);
+            _reticle1.x = game.width / 2;
+            _reticle1.y = game.height / 2;
+            _reticlePosition = new Vec2(_reticle1.x,_reticle1.y);
         } else if (_playerId == PlayerId.PLAYERTWO) {
             _reticle2 = new Reticle("reticle2.png");
+            _reticle2.x = game.width / 2;
+            _reticle2.y = game.height / 2;
+            _reticlePosition = new Vec2(_reticle2.x, _reticle2.y);
             game.AddChild(_reticle2);
         }
     }
@@ -82,37 +99,53 @@ public class Player : Sprite {
         x = _position.x;
         y = _position.y;
 
-        if (_playerId == PlayerId.PLAYERONE) {
-            if (Input.GetKey(Key.T)) {
+        HandleMovement();
+    }
+
+    private void HandleMovement()
+    {
+        if (_playerId == PlayerId.PLAYERONE)
+        {
+            if (Input.GetKey(Key.T))
+            {
                 _reticle1.y -= 10;
                 _reticlePosition.y -= 10;
             }
-            if (Input.GetKey(Key.G)) {
+            if (Input.GetKey(Key.G))
+            {
                 _reticle1.y += 10;
                 _reticlePosition.y += 10;
             }
-            if (Input.GetKey(Key.F)) {
+            if (Input.GetKey(Key.F))
+            {
                 _reticle1.x -= 10;
                 _reticlePosition.x -= 10;
             }
-            if (Input.GetKey(Key.H)) {
+            if (Input.GetKey(Key.H))
+            {
                 _reticle1.x += 10;
                 _reticlePosition.x += 10;
             }
-        } else if (_playerId == PlayerId.PLAYERTWO) {
-            if (Input.GetKey(Key.NUMPAD_8)) {
+        }
+        else if (_playerId == PlayerId.PLAYERTWO)
+        {
+            if (Input.GetKey(Key.NUMPAD_8))
+            {
                 _reticle2.y -= 10;
                 _reticlePosition.y -= 10;
             }
-            if (Input.GetKey(Key.NUMPAD_5)) {
+            if (Input.GetKey(Key.NUMPAD_5))
+            {
                 _reticle2.y += 10;
                 _reticlePosition.y += 10;
             }
-            if (Input.GetKey(Key.NUMPAD_4)) {
+            if (Input.GetKey(Key.NUMPAD_4))
+            {
                 _reticle2.x -= 10;
                 _reticlePosition.x -= 10;
             }
-            if (Input.GetKey(Key.NUMPAD_6)) {
+            if (Input.GetKey(Key.NUMPAD_6))
+            {
                 _reticle2.x += 10;
                 _reticlePosition.x += 10;
             }
@@ -121,6 +154,7 @@ public class Player : Sprite {
 
     public void PickupFlag(Flag pFlag) {
         _flag = pFlag;
+        _allowedToPickUp = false;
         if (!_flag.PickedUp) {
             _flag.PickedUp = true;
             AddChild(_flag);
@@ -130,9 +164,11 @@ public class Player : Sprite {
     public void DropFlag(Flag pFlag) {
         _flag = pFlag;
         _flag.PickedUp = false;
+        _flag.OldX = x;
+        _flag.OldY = y;
         RemoveChild(_flag);
-        _flag.x = x;
-        _flag.y = y;
+        _flag.x = _flag.OldX;
+        _flag.y = _flag.OldY;
         game.AddChild(_flag);
     }
 
