@@ -5,17 +5,19 @@ using GXPEngine;
 
 public class MyGame : Game //MyGame is a Game
 {
-	private List<Sprite> _collidables;
-
+	private List<NLineSegment> _collidables;
+	private List<Bullet> _bullets;
 	private Player _player1;
 	private Player _player2;
-
+	//int index;
 	private int _timer1;
+	private int _timer2;
 
 
 	public MyGame () : base(800, 600, false, false)
 	{
-		_collidables = new List<Sprite>();
+		_collidables = new List<NLineSegment>();
+		_bullets = new List<Bullet>();
 		targetFps = 60;
 		_player1 = new Player("test1.png", Player.PlayerId.PLAYERONE);
 		_player2 = new Player("test2.png", Player.PlayerId.PLAYERTWO);
@@ -46,7 +48,7 @@ public class MyGame : Game //MyGame is a Game
 			bullet.x = _player1.x;
 			bullet.y = _player1.y;
 			AddChild(bullet);
-			_collidables.Add(bullet);
+			_bullets.Add(bullet);
 		}
 
 		if (Input.GetKeyDown(Key.NUMPAD_7))
@@ -55,7 +57,7 @@ public class MyGame : Game //MyGame is a Game
 			bullet.x = _player2.x;
 			bullet.y = _player2.y;
 			AddChild(bullet);
-			_collidables.Add(bullet);
+			_bullets.Add(bullet);
 		}
 
 		if (Input.GetKeyDown(Key.V))
@@ -103,29 +105,33 @@ public class MyGame : Game //MyGame is a Game
 			}
 		}
 
-		//Console.WriteLine(_timer1 + " SEPERATOR " + _player1.Wave.Size);
-
 		if (_player2.Active)
 		{
-			//IsCollidingWithCircle();
+			if (_player2.Wave.Size > 310)
+			{
+				_player2.Active = false;
+				_player2.Canvas.graphics.Clear(Color.Transparent);
+				_player1.alpha = 0.5f;
+				_player2.Wave.Size = 10;
+			}
+			else {
+				if (_timer2 > 10)
+				{
+					_player2.Wave.Size += 100;
+					CreateWaves(_player2, new Pen(Color.Red));
+					_timer2 = 0;
+				}
+				_timer2++;
+			}
 
-	//        if (_player2.Wait == 10)
-	//        {
-				//_player2.Size += 100;
-	//            CreateWaves(_player2, new Pen(Color.Green));
-	//            if (_player2.Size >= 310)
-	//            {
-	//                _player2.Size = 10;
-	//                _player2.Active = false;
-	//                _player2.Canvas.graphics.Clear(Color.Transparent);
-	//                //move the circle reset to a function, posibly that also does the clears
-	//                _player2.Wave.Position = Vec2.zero;
-	//                _player2.Wave.Size = 0;
-				//	_player1.alpha = 0.5f;
-	//            }
-	//            _player2.Wait = 0;
-	//        }
-	//        _player2.Wait++;
+			if (IsCollidingWithCircle(_player1, _player2.Wave))
+			{
+				//circle of player1 is colliding with player 2
+				_player1.alpha = 1f;
+			}
+			else {
+				_player1.alpha = 0.5f;
+			}
 		}
 
 	}
@@ -170,7 +176,7 @@ public class MyGame : Game //MyGame is a Game
 	//system starts here
 	public int CheckCollision(Sprite other)
 	{
-		foreach (Sprite sprite in _collidables)
+		foreach (NLineSegment sprite in _collidables)
 		{
 
 		}
