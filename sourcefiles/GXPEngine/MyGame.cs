@@ -26,7 +26,9 @@ public class MyGame : Game //MyGame is a Game
         _player1 = new Player("test1.png", Player.PlayerId.PLAYERONE);
         _player2 = new Player("test2.png", Player.PlayerId.PLAYERTWO);
         AddChild(_player1);
+        _player1.Position = new Vec2(game.width/12,7*height/8);
         AddChild(_player2);
+        _player2.Position = new Vec2(11*game.width/12,height/8);
 
         CreateBoundary();
         CreateLevel();
@@ -249,14 +251,11 @@ public class MyGame : Game //MyGame is a Game
     }
 
     private Vec2 CheckIntersection(Vec2 v1, Vec2 v2, Vec2 v3, Vec2 v4) {
-        //_test.x = v4.x;
-        //_test.y = v4.y;
         v1.Add(v2.Clone().Subtract(v1).Normal().Scale(_player1.width));
         v2.Add(v2.Clone().Subtract(v1).Normal().Scale(_player1.width));
 
         float ua = ((v4.x - v3.x) * (v1.y - v3.y) - (v4.y - v3.y) * (v1.x - v3.x)) / ((v4.y - v3.y) * (v2.x - v1.x) - (v4.x - v3.x) * (v2.y - v1.y));
         float ub = ((v2.x - v1.x) * (v1.y - v3.y) - (v2.y - v1.y) * (v1.x - v3.x)) / ((v4.y - v3.y) * (v2.x - v1.x) - (v4.x - v3.x) * (v2.y - v1.y));
-        //Console.WriteLine(ua+"||"+ub);
         if (Mathf.Abs(ub) < 1)
             return new Vec2(v1.x + ua * (v2.x - v1.x), v1.y + ua * (v2.y - v1.y));
         else
@@ -266,19 +265,13 @@ public class MyGame : Game //MyGame is a Game
     private bool CheckLine(Bullet ball, LineSegment line) {
         Vec2 _ballToLineStart = ball.Position.Clone().Subtract(line.start);
         float _distance = Mathf.Abs(_ballToLineStart.Dot(line.lineOnOriginNormalized.Normal().Clone()));
-        Vec2 _intersection = CheckIntersection(line.start.Clone(), line.end.Clone(), ball.Position, ball.NextPositionBorder);//try on border
+        Vec2 _intersection = CheckIntersection(line.start.Clone(), line.end.Clone(), ball.Position, ball.NextPositionBorder);
         float _distanceToStart = line.start.DistanceTo(ball.Position);
         float _distanceToEnd = line.end.DistanceTo(ball.Position);
 
-        //_test.x = _intersection.x;
-        //_test.y = _intersection.y;
-
         if (_distance < ball.Radius) {
-            //Console.WriteLine((_distanceToStart > line.lineLenght || _distanceToEnd > line.lineLenght) && _distance < ball.radius);
             if (!((_distanceToStart > line.lineLenght + ball.Radius || _distanceToEnd > line.lineLenght + ball.Radius) && _distance < ball.Radius)) {
                 return true;
-
-                //ball.velocity = Vec2.zero;
             }
         }
         return false;

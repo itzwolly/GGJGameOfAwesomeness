@@ -71,8 +71,14 @@ public class Player : Sprite {
         if (_playerId == PlayerId.PLAYERONE) {
             _reticle1 = new Reticle("reticle1.png");
             game.AddChild(_reticle1);
+            _reticle1.x = game.width / 2;
+            _reticle1.y = game.height / 2;
+            _reticlePosition = new Vec2(_reticle1.x,_reticle1.y);
         } else if (_playerId == PlayerId.PLAYERTWO) {
             _reticle2 = new Reticle("reticle2.png");
+            _reticle2.x = game.width / 2;
+            _reticle2.y = game.height / 2;
+            _reticlePosition = new Vec2(_reticle2.x, _reticle2.y);
             game.AddChild(_reticle2);
         }
     }
@@ -81,37 +87,53 @@ public class Player : Sprite {
         x = _position.x;
         y = _position.y;
 
-        if (_playerId == PlayerId.PLAYERONE) {
-            if (Input.GetKey(Key.T)) {
+        HandleMovement();
+    }
+
+    private void HandleMovement()
+    {
+        if (_playerId == PlayerId.PLAYERONE)
+        {
+            if (Input.GetKey(Key.T))
+            {
                 _reticle1.y -= 10;
                 _reticlePosition.y -= 10;
             }
-            if (Input.GetKey(Key.G)) {
+            if (Input.GetKey(Key.G))
+            {
                 _reticle1.y += 10;
                 _reticlePosition.y += 10;
             }
-            if (Input.GetKey(Key.F)) {
+            if (Input.GetKey(Key.F))
+            {
                 _reticle1.x -= 10;
                 _reticlePosition.x -= 10;
             }
-            if (Input.GetKey(Key.H)) {
+            if (Input.GetKey(Key.H))
+            {
                 _reticle1.x += 10;
                 _reticlePosition.x += 10;
             }
-        } else if (_playerId == PlayerId.PLAYERTWO) {
-            if (Input.GetKey(Key.NUMPAD_8)) {
+        }
+        else if (_playerId == PlayerId.PLAYERTWO)
+        {
+            if (Input.GetKey(Key.NUMPAD_8))
+            {
                 _reticle2.y -= 10;
                 _reticlePosition.y -= 10;
             }
-            if (Input.GetKey(Key.NUMPAD_5)) {
+            if (Input.GetKey(Key.NUMPAD_5))
+            {
                 _reticle2.y += 10;
                 _reticlePosition.y += 10;
             }
-            if (Input.GetKey(Key.NUMPAD_4)) {
+            if (Input.GetKey(Key.NUMPAD_4))
+            {
                 _reticle2.x -= 10;
                 _reticlePosition.x -= 10;
             }
-            if (Input.GetKey(Key.NUMPAD_6)) {
+            if (Input.GetKey(Key.NUMPAD_6))
+            {
                 _reticle2.x += 10;
                 _reticlePosition.x += 10;
             }
