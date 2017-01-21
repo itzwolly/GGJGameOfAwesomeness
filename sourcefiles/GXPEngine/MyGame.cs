@@ -29,14 +29,14 @@ public class MyGame : Game //MyGame is a Game
         {
             _player1.Position.y = Input.mouseY;
             _player1.Position.x = Input.mouseX;
-            _player1.alpha = 100;
+            _player1.alpha = 1f;
         }
 
         if (Input.GetMouseButtonDown(2))
         {
             _player2.Position.y = Input.mouseY;
             _player2.Position.x = Input.mouseX;
-            _player2.alpha = 100;
+            _player2.alpha = 1f;
         }
 
         if (Input.GetKeyDown(Key.R))
@@ -73,11 +73,6 @@ public class MyGame : Game //MyGame is a Game
             CreateWaves(_player2, new Pen(Color.Green));
         }
 
-        if (Input.GetKeyDown(Key.SEMICOLON))
-        { 
-
-        }
-
         if (_player1.Active)
         {
             CheckIfInCircle();
@@ -94,16 +89,11 @@ public class MyGame : Game //MyGame is a Game
                     //move the circle reset to a function, posibly that also does the clears
                     _player1.Wave.Position = Vec2.zero;
                     _player1.Wave.Size = 0;
-                    _player1.alpha = 100;
-                    _player2.alpha = 100;
                 }
                 _player1.Wait = 0;
             }
             _player1.Wait++;
         }
-
-        Console.WriteLine("Player1 X,Y = " + _player1.X + ", " + _player1.Y + " ~ " + "Player1 x,y = " + _player1.x + ", " +  _player1.y);
-        Console.WriteLine(_player1.Wave.Position.x + ", " + _player1.Wave.Position.y);
 
         if (_player2.Active)
         {
@@ -121,8 +111,6 @@ public class MyGame : Game //MyGame is a Game
                     //move the circle reset to a function, posibly that also does the clears
                     _player2.Wave.Position = Vec2.zero;
                     _player2.Wave.Size = 0;
-                    _player1.alpha = 100;
-                    _player2.alpha = 100;
                 }
                 _player2.Wait = 0;
             }
@@ -133,7 +121,6 @@ public class MyGame : Game //MyGame is a Game
 
     private void CreateWaves(Player pPlayer, Pen pPen)
     {
-        //float pX, float pY, Pen pen, Circle circle, Canvas canvas
         pPlayer.Canvas.graphics.Clear(Color.Transparent);
         pPlayer.Wave.Position.x = pPlayer.X;
         pPlayer.Wave.Position.y = pPlayer.Y;
@@ -142,13 +129,13 @@ public class MyGame : Game //MyGame is a Game
 
     private void CheckIfInCircle()
     {
-        if (_player1.Wave.Position.DistanceTo(_player1.Position) <= _player1.Size / 2)
+        if (_player1.Wave.Position.DistanceTo(_player2.Position) <= _player1.Size / 2)
         {
-            _player2.alpha = 1;
+            _player2.alpha = 1f;
         }
-        if (_player2.Wave.Position.DistanceTo(_player2.Position) <= _player2.Size / 2)
+        if (_player2.Wave.Position.DistanceTo(_player1.Position) <= _player2.Size / 2)
         {
-            _player1.alpha = 1;
+            _player1.alpha = 1f;
         }
     }
 

@@ -52,6 +52,8 @@ namespace GXPEngine
 			Position = new Vec2();
 			Reticle = new Vec2(game.width / 2, game.height / 2);
 			SetOrigin(width / 2, height / 2);
+            alpha = 0.5f;
+
 
 			_wave = new Circle(0, 0, 0);
 			_size = 10;
