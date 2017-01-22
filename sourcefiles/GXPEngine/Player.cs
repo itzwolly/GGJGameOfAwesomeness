@@ -175,4 +175,8 @@ public class Player : Sprite {
     public Flag GetFlag() {
         return _flag;
     }
+
+    public PlayerId GetPlayerId() {
+        return _playerId;
+    }
 }

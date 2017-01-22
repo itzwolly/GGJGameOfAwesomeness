@@ -11,9 +11,14 @@ public class MyGame : Game //MyGame is a Game
     private Player _player1;
     private Player _player2;
     private Flag _flag;
+    private Sound _bgm/*, _walking, _player1wave, _player2wave, _shot*/;
+    private FlagBase _flagBase;
+    private List<FlagBase> _flagBases = new List<FlagBase>();
+
 
     private int _timer1;
     private int _timer2;
+    private bool _resetFlagBase = false;
 
     private NLineSegment _line;
 
@@ -22,6 +27,10 @@ public class MyGame : Game //MyGame is a Game
 
         _lines = new List<NLineSegment>();
         _bullets = new List<Bullet>();
+
+        _bgm = new Sound("sfx\\background.wav", true, true);
+        SoundChannel bgmSc = _bgm.Play();
+        bgmSc.Volume = 0.65f;
 
         _player1 = new Player("test1.png", Player.PlayerId.PLAYERONE);
         _player2 = new Player("test2.png", Player.PlayerId.PLAYERTWO);
@@ -32,9 +41,11 @@ public class MyGame : Game //MyGame is a Game
         _player2.Position = new Vec2(11 * game.width / 12 , height / 8);
         _player2.StartingPosition = new Vec2(11 * game.width / 12, height / 8);
 
+
+        CreateFlagBases();
         _flag = new Flag();
         AddChild(_flag);
-
+        
         CreateBoundary();
         CreateLevel();
     }
@@ -72,6 +83,23 @@ public class MyGame : Game //MyGame is a Game
         }
     }
 
+    private void CreateFlagBases() {
+        _flagBase = new FlagBase("assets\\base_neutral_neutral.png", FlagBase.State.NEUTRAL);
+        AddChild(_flagBase);
+        _flagBases.Add(_flagBase);
+        _flagBase = new FlagBase("assets\\base_player_one_neutral.png", FlagBase.State.PLAYERONE_SPOTONE);
+        AddChild(_flagBase);
+        _flagBases.Add(_flagBase);
+        _flagBase = new FlagBase("assets\\base_player_one_neutral.png", FlagBase.State.PLAYERONE_SPOTTWO);
+        AddChild(_flagBase);
+        _flagBases.Add(_flagBase);
+        _flagBase = new FlagBase("assets\\base_player_two_neutral.png", FlagBase.State.PLAYERTWO_SPOTONE);
+        AddChild(_flagBase);
+        _flagBases.Add(_flagBase);
+        _flagBase = new FlagBase("assets\\base_player_two_neutral.png", FlagBase.State.PLAYERTWO_SPOTTWO);
+        AddChild(_flagBase);
+        _flagBases.Add(_flagBase);
+    }
 
     private void CreateBoundary() {
         _line = new NLineSegment(new Vec2(0, 0), new Vec2(game.width, 0), 0xffffff00, 4); // top
@@ -109,6 +137,7 @@ public class MyGame : Game //MyGame is a Game
         //    _player2.alpha = 1f;
         //}
 
+        FlagBaseBehaviour();
 
         if (Input.GetKeyDown(Key.R)) {
             Bullet bullet = new Bullet(_player1.ReticlePosition.Clone().Subtract(_player1.Position), _player1.Position.Clone(), 1);
@@ -196,6 +225,56 @@ public class MyGame : Game //MyGame is a Game
             }
         }
 
+        if (_resetFlagBase) {
+            _resetFlagBase = false;
+            foreach (FlagBase flagBase in _flagBases) {
+                if (flagBase.IsActive == false) {
+                    FlagBase fb = new FlagBase("assets\\" + flagBase.GetUsedFlagBaseSprite(flagBase.GetBaseState()), flagBase.GetBaseState());
+                    fb.x = flagBase.x;
+                    fb.y = flagBase.y;
+                    _flagBases.Remove(flagBase);
+                    flagBase.Destroy();
+                    fb.IsActive = false;
+                    AddChild(fb);
+                    _flagBases.Add(fb);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void FlagBaseBehaviour() {
+        if (_player1.GetFlag() != null) {
+            foreach (FlagBase flagBase in _flagBases) {
+                if (flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO) {
+                    if (flagBase.IsActive) {
+                        if (_player1.HitTest(flagBase)) {
+                            flagBase.IsActive = false;
+                            _resetFlagBase = true;
+                            _player1.DropFlag(_player1.GetFlag());
+                            _player1.GetFlag().x = game.width / 2;
+                            _player1.GetFlag().y = game.height / 2;
+                            _player1.AllowedToPickup = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (_player2.GetFlag() != null) {
+            foreach (FlagBase flagBase in _flagBases) {
+                if (flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTTWO) {
+                    if (flagBase.IsActive) {
+                        if (_player2.HitTest(flagBase)) {
+                            flagBase.IsActive = false;
+                            _player2.DropFlag(_player2.GetFlag());
+                            _player2.GetFlag().x = game.width / 2;
+                            _player2.GetFlag().y = game.height / 2;
+                            _player2.AllowedToPickup = true;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void UpdateFlagPosition(Player pPlayer) {
@@ -220,9 +299,6 @@ public class MyGame : Game //MyGame is a Game
         pPlayer.Wave.Position.x = pPlayer.X;
         pPlayer.Wave.Position.y = pPlayer.Y;
         AddChild(pPlayer.Wave);
-
-        Console.WriteLine(pPlayer.Wave.x + ", " + pPlayer.Wave.y);
-        Console.WriteLine(pPlayer.Wave.Position.x + ", " + pPlayer.Wave.Position.y);
     }
 
     private bool IsCollidingWithCircle(Player pPlayer, Circle pCircle) {
@@ -233,22 +309,30 @@ public class MyGame : Game //MyGame is a Game
     }
 
     private void PlayerMovement() {
-        if (Input.GetKey(Key.W))
+        if (Input.GetKey(Key.W)) {
             _player1.Position.y -= 3;
-        if (Input.GetKey(Key.S))
+        }
+        if (Input.GetKey(Key.S)) {
             _player1.Position.y += 3;
-        if (Input.GetKey(Key.A))
+        }
+        if (Input.GetKey(Key.A)) {
             _player1.Position.x -= 3;
-        if (Input.GetKey(Key.D))
+        }
+        if (Input.GetKey(Key.D)) {
             _player1.Position.x += 3;
-        if (Input.GetKey(Key.UP))
+        }
+        if (Input.GetKey(Key.UP)) {
             _player2.Position.y -= 3;
-        if (Input.GetKey(Key.DOWN))
+        }
+        if (Input.GetKey(Key.DOWN)) {
             _player2.Position.y += 3;
-        if (Input.GetKey(Key.LEFT))
+        }
+        if (Input.GetKey(Key.LEFT)) {
             _player2.Position.x -= 3;
-        if (Input.GetKey(Key.RIGHT))
+        }
+        if (Input.GetKey(Key.RIGHT)) {
             _player2.Position.x += 3;
+        }
     }
 
     //system starts here
