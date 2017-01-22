@@ -15,10 +15,12 @@ public class MyGame : Game //MyGame is a Game
     private FlagBase _flagBase;
     private List<FlagBase> _flagBases = new List<FlagBase>();
     private Player _currentCapturedPlayer;
-
+    private Font _font;
+    private Canvas _canvas;
     private int _timer1;
     private int _timer2;
     private bool _resetFlagBase = false;
+    private int _index, _index2;
 
     private NLineSegment _line;
 
@@ -48,6 +50,11 @@ public class MyGame : Game //MyGame is a Game
         
         CreateBoundary();
         CreateLevel();
+
+        _canvas = new Canvas(game.width, game.height);
+        _font = new Font(FontFamily.GenericSansSerif, 16);
+
+        AddChild(_canvas);
     }
 
     private void CreateLevel() {
@@ -113,6 +120,15 @@ public class MyGame : Game //MyGame is a Game
     }
 
     public void Update() {
+        _canvas.graphics.Clear(Color.Transparent);
+        if (_player1.Score == 2) {
+            _canvas.graphics.DrawString("Player 1 Wins!", _font, Brushes.White, 20, 20);
+        } else if (_player2.Score == 2) {
+            _canvas.graphics.DrawString("Player 2 Wins!", _font, Brushes.White, 20, 20);
+        }
+
+        Console.WriteLine(_index + ", " + _index2);
+
         CheckFlagCollision();
         CheckCollision();
 
@@ -246,7 +262,7 @@ public class MyGame : Game //MyGame is a Game
     private void FlagBaseBehaviour() {
         if (_player1.GetFlag() != null) {
             foreach (FlagBase flagBase in _flagBases) {
-                if (flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO) {
+                if (flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO) {
                     if (flagBase.IsActive) {
                         if (_player1.HitTest(flagBase)) {
                             _currentCapturedPlayer = _player1;
@@ -256,6 +272,7 @@ public class MyGame : Game //MyGame is a Game
                             _player1.GetFlag().x = game.width / 2;
                             _player1.GetFlag().y = game.height / 2;
                             _player1.AllowedToPickup = true;
+                            _player1.Score++;
                         }
                     }
                 }
@@ -263,7 +280,7 @@ public class MyGame : Game //MyGame is a Game
         }
         if (_player2.GetFlag() != null) {
             foreach (FlagBase flagBase in _flagBases) {
-                if (flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTONE) {
+                if (flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTTWO) {
                     if (flagBase.IsActive) {
                         if (_player2.HitTest(flagBase)) {
                             _currentCapturedPlayer = _player2;
@@ -273,6 +290,7 @@ public class MyGame : Game //MyGame is a Game
                             _player2.GetFlag().x = game.width / 2;
                             _player2.GetFlag().y = game.height / 2;
                             _player2.AllowedToPickup = true;
+                            _player2.Score++;
                         }
                     }
                 }

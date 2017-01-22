@@ -15,6 +15,8 @@ public class Player : Sprite {
     private bool _active;
     private float _x;
     private float _y;
+    private int _score;
+
 
     private Vec2 _startingPosition;
     private bool _allowedToPickUp = true;
@@ -66,6 +68,11 @@ public class Player : Sprite {
     public bool AllowedToPickup {
         get { return _allowedToPickUp; }
         set { _allowedToPickUp = value; }
+    }
+
+    public int Score {
+        get { return _score; }
+        set { _score = value; }
     }
 
     public Player(string pFileName, PlayerId pPlayerId)
