@@ -71,4 +71,13 @@ public class FlagBase : Sprite
                 return "";
         }
     }
+
+    public string GetUsedFlagBaseSprite(Player pPlayer) {
+        if (pPlayer.GetPlayerId() == Player.PlayerId.PLAYERONE) {
+            return "base_player_one_used.png";
+        } else if (pPlayer.GetPlayerId() == Player.PlayerId.PLAYERTWO) {
+            return "base_player_two_used.png";
+        }
+        return "";
+    }
 }

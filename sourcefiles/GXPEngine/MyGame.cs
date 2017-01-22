@@ -14,7 +14,7 @@ public class MyGame : Game //MyGame is a Game
     private Sound _bgm/*, _walking, _player1wave, _player2wave, _shot*/;
     private FlagBase _flagBase;
     private List<FlagBase> _flagBases = new List<FlagBase>();
-
+    private Player _currentCapturedPlayer;
 
     private int _timer1;
     private int _timer2;
@@ -87,16 +87,16 @@ public class MyGame : Game //MyGame is a Game
         _flagBase = new FlagBase("assets\\base_neutral_neutral.png", FlagBase.State.NEUTRAL);
         AddChild(_flagBase);
         _flagBases.Add(_flagBase);
-        _flagBase = new FlagBase("assets\\base_player_one_neutral.png", FlagBase.State.PLAYERONE_SPOTONE);
+        _flagBase = new FlagBase("assets\\base_neutral_neutral.png", FlagBase.State.PLAYERONE_SPOTONE);
         AddChild(_flagBase);
         _flagBases.Add(_flagBase);
-        _flagBase = new FlagBase("assets\\base_player_one_neutral.png", FlagBase.State.PLAYERONE_SPOTTWO);
+        _flagBase = new FlagBase("assets\\base_neutral_neutral.png", FlagBase.State.PLAYERONE_SPOTTWO);
         AddChild(_flagBase);
         _flagBases.Add(_flagBase);
-        _flagBase = new FlagBase("assets\\base_player_two_neutral.png", FlagBase.State.PLAYERTWO_SPOTONE);
+        _flagBase = new FlagBase("assets\\base_neutral_neutral.png", FlagBase.State.PLAYERTWO_SPOTONE);
         AddChild(_flagBase);
         _flagBases.Add(_flagBase);
-        _flagBase = new FlagBase("assets\\base_player_two_neutral.png", FlagBase.State.PLAYERTWO_SPOTTWO);
+        _flagBase = new FlagBase("assets\\base_neutral_neutral.png", FlagBase.State.PLAYERTWO_SPOTTWO);
         AddChild(_flagBase);
         _flagBases.Add(_flagBase);
     }
@@ -229,7 +229,7 @@ public class MyGame : Game //MyGame is a Game
             _resetFlagBase = false;
             foreach (FlagBase flagBase in _flagBases) {
                 if (flagBase.IsActive == false) {
-                    FlagBase fb = new FlagBase("assets\\" + flagBase.GetUsedFlagBaseSprite(flagBase.GetBaseState()), flagBase.GetBaseState());
+                    FlagBase fb = new FlagBase("assets\\" + flagBase.GetUsedFlagBaseSprite(_currentCapturedPlayer), flagBase.GetBaseState());
                     fb.x = flagBase.x;
                     fb.y = flagBase.y;
                     _flagBases.Remove(flagBase);
@@ -249,6 +249,7 @@ public class MyGame : Game //MyGame is a Game
                 if (flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO) {
                     if (flagBase.IsActive) {
                         if (_player1.HitTest(flagBase)) {
+                            _currentCapturedPlayer = _player1;
                             flagBase.IsActive = false;
                             _resetFlagBase = true;
                             _player1.DropFlag(_player1.GetFlag());
@@ -262,10 +263,12 @@ public class MyGame : Game //MyGame is a Game
         }
         if (_player2.GetFlag() != null) {
             foreach (FlagBase flagBase in _flagBases) {
-                if (flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTTWO) {
+                if (flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTONE || flagBase.GetBaseState() == FlagBase.State.PLAYERTWO_SPOTTWO || flagBase.GetBaseState() == FlagBase.State.PLAYERONE_SPOTONE) {
                     if (flagBase.IsActive) {
                         if (_player2.HitTest(flagBase)) {
+                            _currentCapturedPlayer = _player2;
                             flagBase.IsActive = false;
+                            _resetFlagBase = true;
                             _player2.DropFlag(_player2.GetFlag());
                             _player2.GetFlag().x = game.width / 2;
                             _player2.GetFlag().y = game.height / 2;
